@@ -42,7 +42,7 @@ const { series } = require('gulp');
 
 exports.build = series(...[
     'babel-zango',
-    // 'browserify-zango',
+    'browserify-zango',
     'babel-test',
-    // 'browserify-test'
+    'browserify-test'
 ]);
