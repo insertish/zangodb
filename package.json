@@ -9,11 +9,12 @@
   },
   "scripts": {
     "test": "mocha --reporter spec build/test/index.js",
+    "prepublish": "in-publish && gulp build || echo Skipping build.",
     "build": "gulp build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/erikolson186/zangodb.git"
+    "url": "git+https://github.com/insertish/zangodb.git"
   },
   "keywords": [
     "database",
@@ -25,11 +26,18 @@
     "mongo"
   ],
   "author": "Erik Olson <erikolson186@gmail.com>",
+  "contributors": [
+    {
+      "name": "Paul Makles",
+      "email": "me@insrt.uk",
+      "url": "https://insrt.uk"
+    }
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/erikolson186/zangodb/issues"
+    "url": "https://github.com/insertish/zangodb/issues"
   },
-  "homepage": "https://github.com/erikolson186/zangodb#readme",
+  "homepage": "https://github.com/insertish/zangodb",
   "dependencies": {
     "clone": "^2.1.2",
     "deepmerge": "^4.2.2",
@@ -47,6 +55,7 @@
     "gulp-babel": "^8.0.0",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-uglify": "^3.0.2",
+    "in-publish": "^2.0.1",
     "mocha": "^8.2.1",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
