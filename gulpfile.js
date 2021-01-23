@@ -4,12 +4,11 @@ const gulp = require('gulp'),
       uglify = require('gulp-uglify'),
       sourcemaps = require('gulp-sourcemaps'),
       source = require('vinyl-source-stream'),
-      buffer = require('vinyl-buffer'),
-      runSequence = require('run-sequence');
+      buffer = require('vinyl-buffer');
 
 gulp.task('babel-zango', () => {
     return gulp.src('./src/**/*.js')
-        .pipe(babel({ presets: ['es2015'] }))
+        .pipe(babel({ presets: ['@babel/preset-env'] }))
         .pipe(gulp.dest('./build/src'));
 });
 
@@ -28,7 +27,7 @@ gulp.task('browserify-zango', () => {
 
 gulp.task('babel-test', () => {
     return gulp.src('./test/**/*.js')
-        .pipe(babel({ presets: ['es2015'] }))
+        .pipe(babel({ presets: ['@babel/preset-env'] }))
         .pipe(gulp.dest('./build/test'));
 });
 
@@ -39,13 +38,11 @@ gulp.task('browserify-test', () => {
         .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('build', (cb) => {
-    runSequence(...[
-        'babel-zango',
-        'browserify-zango',
-        'babel-test',
-        'browserify-test'
-    ], cb);
-});
+const { series } = require('gulp');
 
-gulp.task('default', ['build']);
+exports.build = series(...[
+    'babel-zango',
+    // 'browserify-zango',
+    'babel-test',
+    // 'browserify-test'
+]);

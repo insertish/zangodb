@@ -1,3 +1,5 @@
-'use strict';
+"use strict";
 
-module.exports = { Db: require('./db.js') };
+module.exports = {
+  Db: require('./db.js')
+};

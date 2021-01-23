@@ -1,1029 +1,1092 @@
-'use strict';
+"use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _require = require('../util.js');
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-var unknownOp = _require.unknownOp;
-var MISSING = require('./missing_symbol.js');
-var Path = require('./path.js');
-var Value = function () {
-    function Value(value) {
-        _classCallCheck(this, Value);
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-        this.value = value;
+var _require = require('../util.js'),
+    unknownOp = _require.unknownOp,
+    MISSING = require('./missing_symbol.js'),
+    Path = require('./path.js');
+
+var Value = /*#__PURE__*/function () {
+  function Value(value) {
+    _classCallCheck(this, Value);
+
+    this.value = value;
+  }
+
+  _createClass(Value, [{
+    key: "run",
+    value: function run() {
+      return this.value;
     }
+  }, {
+    key: "ResultType",
+    get: function get() {
+      return this.constructor;
+    }
+  }], [{
+    key: "any",
+    value: function any(value) {
+      if (typeof value === 'number') {
+        return new NumberValue(value);
+      }
 
-    _createClass(Value, [{
-        key: 'run',
-        value: function run() {
-            return this.value;
-        }
-    }, {
-        key: 'ResultType',
-        get: function get() {
-            return this.constructor;
-        }
-    }], [{
-        key: 'any',
-        value: function any(value) {
-            if (typeof value === 'number') {
-                return new NumberValue(value);
-            }
+      if (typeof value === 'string') {
+        return new StringValue(value);
+      }
 
-            if (typeof value === 'string') {
-                return new StringValue(value);
-            }
+      if (Array.isArray(value)) {
+        return new ArrayValue(value);
+      }
 
-            if (Array.isArray(value)) {
-                return new ArrayValue(value);
-            }
+      if (value instanceof Date) {
+        return new DateValue(value);
+      }
 
-            if (value instanceof Date) {
-                return new DateValue(value);
-            }
+      return new Value(value);
+    }
+  }, {
+    key: "literal",
+    value: function literal(value) {
+      return new Literal(Value.any(value));
+    }
+  }]);
 
-            return new Value(value);
-        }
-    }, {
-        key: 'literal',
-        value: function literal(value) {
-            return new Literal(Value.any(value));
-        }
-    }]);
-
-    return Value;
+  return Value;
 }();
 
-var NumberValue = function (_Value) {
-    _inherits(NumberValue, _Value);
+var NumberValue = /*#__PURE__*/function (_Value) {
+  _inherits(NumberValue, _Value);
 
-    function NumberValue() {
-        _classCallCheck(this, NumberValue);
+  var _super = _createSuper(NumberValue);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(NumberValue).apply(this, arguments));
+  function NumberValue() {
+    _classCallCheck(this, NumberValue);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(NumberValue, null, [{
+    key: "isType",
+    value: function isType(value) {
+      return typeof value === 'number';
     }
+  }]);
 
-    _createClass(NumberValue, null, [{
-        key: 'isType',
-        value: function isType(value) {
-            return typeof value === 'number';
-        }
-    }]);
-
-    return NumberValue;
+  return NumberValue;
 }(Value);
 
-var StringValue = function (_Value2) {
-    _inherits(StringValue, _Value2);
+var StringValue = /*#__PURE__*/function (_Value2) {
+  _inherits(StringValue, _Value2);
 
-    function StringValue() {
-        _classCallCheck(this, StringValue);
+  var _super2 = _createSuper(StringValue);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(StringValue).apply(this, arguments));
+  function StringValue() {
+    _classCallCheck(this, StringValue);
+
+    return _super2.apply(this, arguments);
+  }
+
+  _createClass(StringValue, null, [{
+    key: "isType",
+    value: function isType(value) {
+      return typeof value === 'string';
     }
+  }]);
 
-    _createClass(StringValue, null, [{
-        key: 'isType',
-        value: function isType(value) {
-            return typeof value === 'string';
-        }
-    }]);
-
-    return StringValue;
+  return StringValue;
 }(Value);
 
-var ArrayValue = function (_Value3) {
-    _inherits(ArrayValue, _Value3);
+var ArrayValue = /*#__PURE__*/function (_Value3) {
+  _inherits(ArrayValue, _Value3);
 
-    function ArrayValue() {
-        _classCallCheck(this, ArrayValue);
+  var _super3 = _createSuper(ArrayValue);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(ArrayValue).apply(this, arguments));
+  function ArrayValue() {
+    _classCallCheck(this, ArrayValue);
+
+    return _super3.apply(this, arguments);
+  }
+
+  _createClass(ArrayValue, null, [{
+    key: "isType",
+    value: function isType(value) {
+      return Array.isArray(value);
     }
+  }]);
 
-    _createClass(ArrayValue, null, [{
-        key: 'isType',
-        value: function isType(value) {
-            return Array.isArray(value);
-        }
-    }]);
-
-    return ArrayValue;
+  return ArrayValue;
 }(Value);
 
-var DateValue = function (_Value4) {
-    _inherits(DateValue, _Value4);
+var DateValue = /*#__PURE__*/function (_Value4) {
+  _inherits(DateValue, _Value4);
 
-    function DateValue() {
-        _classCallCheck(this, DateValue);
+  var _super4 = _createSuper(DateValue);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(DateValue).apply(this, arguments));
+  function DateValue() {
+    _classCallCheck(this, DateValue);
+
+    return _super4.apply(this, arguments);
+  }
+
+  _createClass(DateValue, null, [{
+    key: "isType",
+    value: function isType(value) {
+      return value instanceof Date;
     }
+  }]);
 
-    _createClass(DateValue, null, [{
-        key: 'isType',
-        value: function isType(value) {
-            return value instanceof Date;
-        }
-    }]);
-
-    return DateValue;
+  return DateValue;
 }(Value);
 
-var Literal = function (_Value5) {
-    _inherits(Literal, _Value5);
+var Literal = /*#__PURE__*/function (_Value5) {
+  _inherits(Literal, _Value5);
 
-    function Literal() {
-        _classCallCheck(this, Literal);
+  var _super5 = _createSuper(Literal);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Literal).apply(this, arguments));
+  function Literal() {
+    _classCallCheck(this, Literal);
+
+    return _super5.apply(this, arguments);
+  }
+
+  _createClass(Literal, [{
+    key: "run",
+    value: function run() {
+      return this.value.run();
     }
+  }, {
+    key: "ResultType",
+    get: function get() {
+      return this.value.ResultType;
+    }
+  }]);
 
-    _createClass(Literal, [{
-        key: 'run',
-        value: function run() {
-            return this.value.run();
-        }
-    }, {
-        key: 'ResultType',
-        get: function get() {
-            return this.value.ResultType;
-        }
-    }]);
-
-    return Literal;
+  return Literal;
 }(Value);
 
-var Get = function () {
-    function Get(path) {
-        _classCallCheck(this, Get);
+var Get = /*#__PURE__*/function () {
+  function Get(path) {
+    _classCallCheck(this, Get);
 
-        this.path = path;
+    this.path = path;
+  }
+
+  _createClass(Get, [{
+    key: "run",
+    value: function run(fields) {
+      var value = fields.get(this.path);
+      return value === MISSING ? null : value;
     }
+  }]);
 
-    _createClass(Get, [{
-        key: 'run',
-        value: function run(fields) {
-            var value = fields.get(this.path);
-
-            return value === MISSING ? null : value;
-        }
-    }]);
-
-    return Get;
+  return Get;
 }();
 
-var ObjectExpr = function (_Value6) {
-    _inherits(ObjectExpr, _Value6);
+var ObjectExpr = /*#__PURE__*/function (_Value6) {
+  _inherits(ObjectExpr, _Value6);
 
-    function ObjectExpr() {
-        _classCallCheck(this, ObjectExpr);
+  var _super6 = _createSuper(ObjectExpr);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(ObjectExpr).apply(this, arguments));
+  function ObjectExpr() {
+    _classCallCheck(this, ObjectExpr);
+
+    return _super6.apply(this, arguments);
+  }
+
+  _createClass(ObjectExpr, [{
+    key: "run",
+    value: function run(fields) {
+      var result = {},
+          value = this.value;
+
+      for (var field in value) {
+        result[field] = value[field].run(fields);
+      }
+
+      return result;
     }
+  }]);
 
-    _createClass(ObjectExpr, [{
-        key: 'run',
-        value: function run(fields) {
-            var result = {};var value = this.value;
-
-
-            for (var field in value) {
-                result[field] = value[field].run(fields);
-            }
-
-            return result;
-        }
-    }]);
-
-    return ObjectExpr;
+  return ObjectExpr;
 }(Value);
 
-var Operator = function () {
-    function Operator() {
-        _classCallCheck(this, Operator);
+var Operator = /*#__PURE__*/function () {
+  function Operator() {
+    _classCallCheck(this, Operator);
 
-        this.args = [];
+    this.args = [];
+  }
+
+  _createClass(Operator, [{
+    key: "add",
+    value: function add(node) {
+      this.args.push(node);
     }
+  }, {
+    key: "alt",
+    get: function get() {
+      return new Value(null);
+    }
+  }]);
 
-    _createClass(Operator, [{
-        key: 'add',
-        value: function add(node) {
-            this.args.push(node);
-        }
-    }, {
-        key: 'alt',
-        get: function get() {
-            return new Value(null);
-        }
-    }]);
-
-    return Operator;
+  return Operator;
 }();
 
-var FnOp = function (_Operator) {
-    _inherits(FnOp, _Operator);
+var FnOp = /*#__PURE__*/function (_Operator) {
+  _inherits(FnOp, _Operator);
 
-    function FnOp(fn) {
-        _classCallCheck(this, FnOp);
+  var _super7 = _createSuper(FnOp);
 
-        var _this7 = _possibleConstructorReturn(this, Object.getPrototypeOf(FnOp).call(this));
+  function FnOp(fn) {
+    var _this;
 
-        _this7.fn = fn;
-        return _this7;
+    _classCallCheck(this, FnOp);
+
+    _this = _super7.call(this);
+    _this.fn = fn;
+    return _this;
+  }
+
+  _createClass(FnOp, [{
+    key: "run",
+    value: function run(fields) {
+      var args = this.args,
+          fn = this.fn;
+      return args.map(function (arg) {
+        return arg.run(fields);
+      }).reduce(fn);
     }
+  }, {
+    key: "length",
+    get: function get() {
+      return Infinity;
+    }
+  }]);
 
-    _createClass(FnOp, [{
-        key: 'run',
-        value: function run(fields) {
-            var args = this.args;
-            var fn = this.fn;
-
-
-            return args.map(function (arg) {
-                return arg.run(fields);
-            }).reduce(fn);
-        }
-    }, {
-        key: 'length',
-        get: function get() {
-            return Infinity;
-        }
-    }]);
-
-    return FnOp;
+  return FnOp;
 }(Operator);
 
-var UnaryFnOp = function (_FnOp) {
-    _inherits(UnaryFnOp, _FnOp);
+var UnaryFnOp = /*#__PURE__*/function (_FnOp) {
+  _inherits(UnaryFnOp, _FnOp);
 
-    function UnaryFnOp() {
-        _classCallCheck(this, UnaryFnOp);
+  var _super8 = _createSuper(UnaryFnOp);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(UnaryFnOp).apply(this, arguments));
+  function UnaryFnOp() {
+    _classCallCheck(this, UnaryFnOp);
+
+    return _super8.apply(this, arguments);
+  }
+
+  _createClass(UnaryFnOp, [{
+    key: "run",
+    value: function run(fields) {
+      return this.fn(this.args[0].run(fields));
     }
+  }, {
+    key: "length",
+    get: function get() {
+      return 1;
+    }
+  }]);
 
-    _createClass(UnaryFnOp, [{
-        key: 'run',
-        value: function run(fields) {
-            return this.fn(this.args[0].run(fields));
-        }
-    }, {
-        key: 'length',
-        get: function get() {
-            return 1;
-        }
-    }]);
-
-    return UnaryFnOp;
+  return UnaryFnOp;
 }(FnOp);
 
 var fnOp = function fnOp(Parent, fn) {
-    return function (_Parent) {
-        _inherits(_class, _Parent);
+  return /*#__PURE__*/function (_Parent) {
+    _inherits(_class, _Parent);
 
-        function _class() {
-            _classCallCheck(this, _class);
+    var _super9 = _createSuper(_class);
 
-            return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, fn));
-        }
+    function _class() {
+      _classCallCheck(this, _class);
 
-        return _class;
-    }(Parent);
+      return _super9.call(this, fn);
+    }
+
+    return _class;
+  }(Parent);
 };
 
 var opTypes = function opTypes(Parent, InputType) {
-    var ResultType = arguments.length <= 2 || arguments[2] === undefined ? InputType : arguments[2];
+  var ResultType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : InputType;
 
-    var Constructor = function (_Parent2) {
-        _inherits(Constructor, _Parent2);
+  var Constructor = /*#__PURE__*/function (_Parent2) {
+    _inherits(Constructor, _Parent2);
 
-        function Constructor() {
-            _classCallCheck(this, Constructor);
+    var _super10 = _createSuper(Constructor);
 
-            return _possibleConstructorReturn(this, Object.getPrototypeOf(Constructor).apply(this, arguments));
-        }
+    function Constructor() {
+      _classCallCheck(this, Constructor);
 
-        return Constructor;
-    }(Parent);
-
-    Constructor.prototype.InputType = InputType;
-    Constructor.prototype.ResultType = ResultType;
-
-    return Constructor;
-};
-
-var ArithOp = function (_opTypes) {
-    _inherits(ArithOp, _opTypes);
-
-    function ArithOp() {
-        _classCallCheck(this, ArithOp);
-
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(ArithOp).apply(this, arguments));
+      return _super10.apply(this, arguments);
     }
 
-    return ArithOp;
+    return Constructor;
+  }(Parent);
+
+  Constructor.prototype.InputType = InputType;
+  Constructor.prototype.ResultType = ResultType;
+  return Constructor;
+};
+
+var ArithOp = /*#__PURE__*/function (_opTypes) {
+  _inherits(ArithOp, _opTypes);
+
+  var _super11 = _createSuper(ArithOp);
+
+  function ArithOp() {
+    _classCallCheck(this, ArithOp);
+
+    return _super11.apply(this, arguments);
+  }
+
+  return ArithOp;
 }(opTypes(FnOp, NumberValue));
 
 var arithOp = function arithOp(fn) {
-    return fnOp(ArithOp, fn);
+  return fnOp(ArithOp, fn);
 };
 
-var Add = function (_arithOp) {
-    _inherits(Add, _arithOp);
+var Add = /*#__PURE__*/function (_arithOp) {
+  _inherits(Add, _arithOp);
 
-    function Add() {
-        _classCallCheck(this, Add);
+  var _super12 = _createSuper(Add);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Add).apply(this, arguments));
-    }
+  function Add() {
+    _classCallCheck(this, Add);
 
-    return Add;
+    return _super12.apply(this, arguments);
+  }
+
+  return Add;
 }(arithOp(function (a, b) {
-    return a + b;
+  return a + b;
 }));
 
-var Subtract = function (_arithOp2) {
-    _inherits(Subtract, _arithOp2);
+var Subtract = /*#__PURE__*/function (_arithOp2) {
+  _inherits(Subtract, _arithOp2);
 
-    function Subtract() {
-        _classCallCheck(this, Subtract);
+  var _super13 = _createSuper(Subtract);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Subtract).apply(this, arguments));
-    }
+  function Subtract() {
+    _classCallCheck(this, Subtract);
 
-    return Subtract;
+    return _super13.apply(this, arguments);
+  }
+
+  return Subtract;
 }(arithOp(function (a, b) {
-    return a - b;
+  return a - b;
 }));
 
-var Multiply = function (_arithOp3) {
-    _inherits(Multiply, _arithOp3);
+var Multiply = /*#__PURE__*/function (_arithOp3) {
+  _inherits(Multiply, _arithOp3);
 
-    function Multiply() {
-        _classCallCheck(this, Multiply);
+  var _super14 = _createSuper(Multiply);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Multiply).apply(this, arguments));
-    }
+  function Multiply() {
+    _classCallCheck(this, Multiply);
 
-    return Multiply;
+    return _super14.apply(this, arguments);
+  }
+
+  return Multiply;
 }(arithOp(function (a, b) {
-    return a * b;
+  return a * b;
 }));
 
-var Divide = function (_arithOp4) {
-    _inherits(Divide, _arithOp4);
+var Divide = /*#__PURE__*/function (_arithOp4) {
+  _inherits(Divide, _arithOp4);
 
-    function Divide() {
-        _classCallCheck(this, Divide);
+  var _super15 = _createSuper(Divide);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Divide).apply(this, arguments));
-    }
+  function Divide() {
+    _classCallCheck(this, Divide);
 
-    return Divide;
+    return _super15.apply(this, arguments);
+  }
+
+  return Divide;
 }(arithOp(function (a, b) {
-    return a / b;
+  return a / b;
 }));
 
-var Mod = function (_arithOp5) {
-    _inherits(Mod, _arithOp5);
+var Mod = /*#__PURE__*/function (_arithOp5) {
+  _inherits(Mod, _arithOp5);
 
-    function Mod() {
-        _classCallCheck(this, Mod);
+  var _super16 = _createSuper(Mod);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Mod).apply(this, arguments));
-    }
+  function Mod() {
+    _classCallCheck(this, Mod);
 
-    return Mod;
+    return _super16.apply(this, arguments);
+  }
+
+  return Mod;
 }(arithOp(function (a, b) {
-    return a % b;
+  return a % b;
 }));
 
-var MathOp = function (_opTypes2) {
-    _inherits(MathOp, _opTypes2);
+var MathOp = /*#__PURE__*/function (_opTypes2) {
+  _inherits(MathOp, _opTypes2);
 
-    function MathOp() {
-        _classCallCheck(this, MathOp);
+  var _super17 = _createSuper(MathOp);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(MathOp).apply(this, arguments));
+  function MathOp() {
+    _classCallCheck(this, MathOp);
+
+    return _super17.apply(this, arguments);
+  }
+
+  _createClass(MathOp, [{
+    key: "run",
+    value: function run(fields) {
+      return this.fn.apply(this, _toConsumableArray(this.args.map(function (arg) {
+        return arg.run(fields);
+      })));
     }
+  }, {
+    key: "length",
+    get: function get() {
+      return this.fn.length;
+    }
+  }]);
 
-    _createClass(MathOp, [{
-        key: 'run',
-        value: function run(fields) {
-            return this.fn.apply(this, _toConsumableArray(this.args.map(function (arg) {
-                return arg.run(fields);
-            })));
-        }
-    }, {
-        key: 'length',
-        get: function get() {
-            return this.fn.length;
-        }
-    }]);
-
-    return MathOp;
+  return MathOp;
 }(opTypes(FnOp, NumberValue));
 
 var mathOp = function mathOp(fn) {
-    return fnOp(MathOp, fn);
+  return fnOp(MathOp, fn);
 };
 
-var Abs = function (_mathOp) {
-    _inherits(Abs, _mathOp);
+var Abs = /*#__PURE__*/function (_mathOp) {
+  _inherits(Abs, _mathOp);
 
-    function Abs() {
-        _classCallCheck(this, Abs);
+  var _super18 = _createSuper(Abs);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Abs).apply(this, arguments));
-    }
+  function Abs() {
+    _classCallCheck(this, Abs);
 
-    return Abs;
+    return _super18.apply(this, arguments);
+  }
+
+  return Abs;
 }(mathOp(Math.abs));
 
-var Ceil = function (_mathOp2) {
-    _inherits(Ceil, _mathOp2);
+var Ceil = /*#__PURE__*/function (_mathOp2) {
+  _inherits(Ceil, _mathOp2);
 
-    function Ceil() {
-        _classCallCheck(this, Ceil);
+  var _super19 = _createSuper(Ceil);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Ceil).apply(this, arguments));
-    }
+  function Ceil() {
+    _classCallCheck(this, Ceil);
 
-    return Ceil;
+    return _super19.apply(this, arguments);
+  }
+
+  return Ceil;
 }(mathOp(Math.ceil));
 
-var Floor = function (_mathOp3) {
-    _inherits(Floor, _mathOp3);
+var Floor = /*#__PURE__*/function (_mathOp3) {
+  _inherits(Floor, _mathOp3);
 
-    function Floor() {
-        _classCallCheck(this, Floor);
+  var _super20 = _createSuper(Floor);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Floor).apply(this, arguments));
-    }
+  function Floor() {
+    _classCallCheck(this, Floor);
 
-    return Floor;
+    return _super20.apply(this, arguments);
+  }
+
+  return Floor;
 }(mathOp(Math.floor));
 
-var Ln = function (_mathOp4) {
-    _inherits(Ln, _mathOp4);
+var Ln = /*#__PURE__*/function (_mathOp4) {
+  _inherits(Ln, _mathOp4);
 
-    function Ln() {
-        _classCallCheck(this, Ln);
+  var _super21 = _createSuper(Ln);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Ln).apply(this, arguments));
-    }
+  function Ln() {
+    _classCallCheck(this, Ln);
 
-    return Ln;
+    return _super21.apply(this, arguments);
+  }
+
+  return Ln;
 }(mathOp(Math.log));
 
-var Log10 = function (_mathOp5) {
-    _inherits(Log10, _mathOp5);
+var Log10 = /*#__PURE__*/function (_mathOp5) {
+  _inherits(Log10, _mathOp5);
 
-    function Log10() {
-        _classCallCheck(this, Log10);
+  var _super22 = _createSuper(Log10);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Log10).apply(this, arguments));
-    }
+  function Log10() {
+    _classCallCheck(this, Log10);
 
-    return Log10;
+    return _super22.apply(this, arguments);
+  }
+
+  return Log10;
 }(mathOp(Math.log10));
 
-var Pow = function (_mathOp6) {
-    _inherits(Pow, _mathOp6);
+var Pow = /*#__PURE__*/function (_mathOp6) {
+  _inherits(Pow, _mathOp6);
 
-    function Pow() {
-        _classCallCheck(this, Pow);
+  var _super23 = _createSuper(Pow);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Pow).apply(this, arguments));
-    }
+  function Pow() {
+    _classCallCheck(this, Pow);
 
-    return Pow;
+    return _super23.apply(this, arguments);
+  }
+
+  return Pow;
 }(mathOp(Math.pow));
 
-var Sqrt = function (_mathOp7) {
-    _inherits(Sqrt, _mathOp7);
+var Sqrt = /*#__PURE__*/function (_mathOp7) {
+  _inherits(Sqrt, _mathOp7);
 
-    function Sqrt() {
-        _classCallCheck(this, Sqrt);
+  var _super24 = _createSuper(Sqrt);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Sqrt).apply(this, arguments));
-    }
+  function Sqrt() {
+    _classCallCheck(this, Sqrt);
 
-    return Sqrt;
+    return _super24.apply(this, arguments);
+  }
+
+  return Sqrt;
 }(mathOp(Math.sqrt));
 
-var Trunc = function (_mathOp8) {
-    _inherits(Trunc, _mathOp8);
+var Trunc = /*#__PURE__*/function (_mathOp8) {
+  _inherits(Trunc, _mathOp8);
 
-    function Trunc() {
-        _classCallCheck(this, Trunc);
+  var _super25 = _createSuper(Trunc);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Trunc).apply(this, arguments));
-    }
+  function Trunc() {
+    _classCallCheck(this, Trunc);
 
-    return Trunc;
+    return _super25.apply(this, arguments);
+  }
+
+  return Trunc;
 }(mathOp(Math.trunc));
 
-var StringConcatOp = function (_opTypes3) {
-    _inherits(StringConcatOp, _opTypes3);
+var StringConcatOp = /*#__PURE__*/function (_opTypes3) {
+  _inherits(StringConcatOp, _opTypes3);
 
-    function StringConcatOp() {
-        _classCallCheck(this, StringConcatOp);
+  var _super26 = _createSuper(StringConcatOp);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(StringConcatOp).apply(this, arguments));
-    }
+  function StringConcatOp() {
+    _classCallCheck(this, StringConcatOp);
 
-    return StringConcatOp;
+    return _super26.apply(this, arguments);
+  }
+
+  return StringConcatOp;
 }(opTypes(FnOp, StringValue));
 
-var Concat = function (_fnOp) {
-    _inherits(Concat, _fnOp);
+var Concat = /*#__PURE__*/function (_fnOp) {
+  _inherits(Concat, _fnOp);
 
-    function Concat() {
-        _classCallCheck(this, Concat);
+  var _super27 = _createSuper(Concat);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Concat).apply(this, arguments));
-    }
+  function Concat() {
+    _classCallCheck(this, Concat);
 
-    return Concat;
+    return _super27.apply(this, arguments);
+  }
+
+  return Concat;
 }(fnOp(StringConcatOp, function (a, b) {
-    return a + b;
+  return a + b;
 }));
 
-var CaseOp = function (_opTypes4) {
-    _inherits(CaseOp, _opTypes4);
+var CaseOp = /*#__PURE__*/function (_opTypes4) {
+  _inherits(CaseOp, _opTypes4);
 
-    function CaseOp() {
-        _classCallCheck(this, CaseOp);
+  var _super28 = _createSuper(CaseOp);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(CaseOp).apply(this, arguments));
+  function CaseOp() {
+    _classCallCheck(this, CaseOp);
+
+    return _super28.apply(this, arguments);
+  }
+
+  _createClass(CaseOp, [{
+    key: "alt",
+    get: function get() {
+      return new StringValue('');
     }
+  }]);
 
-    _createClass(CaseOp, [{
-        key: 'alt',
-        get: function get() {
-            return new StringValue('');
-        }
-    }]);
-
-    return CaseOp;
+  return CaseOp;
 }(opTypes(UnaryFnOp, StringValue));
 
-var ToLower = function (_fnOp2) {
-    _inherits(ToLower, _fnOp2);
+var ToLower = /*#__PURE__*/function (_fnOp2) {
+  _inherits(ToLower, _fnOp2);
 
-    function ToLower() {
-        _classCallCheck(this, ToLower);
+  var _super29 = _createSuper(ToLower);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(ToLower).apply(this, arguments));
-    }
+  function ToLower() {
+    _classCallCheck(this, ToLower);
 
-    return ToLower;
+    return _super29.apply(this, arguments);
+  }
+
+  return ToLower;
 }(fnOp(CaseOp, function (s) {
-    return s.toLowerCase();
+  return s.toLowerCase();
 }));
 
-var ToUpper = function (_fnOp3) {
-    _inherits(ToUpper, _fnOp3);
+var ToUpper = /*#__PURE__*/function (_fnOp3) {
+  _inherits(ToUpper, _fnOp3);
 
-    function ToUpper() {
-        _classCallCheck(this, ToUpper);
+  var _super30 = _createSuper(ToUpper);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(ToUpper).apply(this, arguments));
-    }
+  function ToUpper() {
+    _classCallCheck(this, ToUpper);
 
-    return ToUpper;
+    return _super30.apply(this, arguments);
+  }
+
+  return ToUpper;
 }(fnOp(CaseOp, function (s) {
-    return s.toUpperCase();
+  return s.toUpperCase();
 }));
 
-var ConcatArraysOp = function (_opTypes5) {
-    _inherits(ConcatArraysOp, _opTypes5);
+var ConcatArraysOp = /*#__PURE__*/function (_opTypes5) {
+  _inherits(ConcatArraysOp, _opTypes5);
 
-    function ConcatArraysOp() {
-        _classCallCheck(this, ConcatArraysOp);
+  var _super31 = _createSuper(ConcatArraysOp);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(ConcatArraysOp).apply(this, arguments));
-    }
+  function ConcatArraysOp() {
+    _classCallCheck(this, ConcatArraysOp);
 
-    return ConcatArraysOp;
+    return _super31.apply(this, arguments);
+  }
+
+  return ConcatArraysOp;
 }(opTypes(FnOp, ArrayValue));
 
-var ConcatArrays = function (_fnOp4) {
-    _inherits(ConcatArrays, _fnOp4);
+var ConcatArrays = /*#__PURE__*/function (_fnOp4) {
+  _inherits(ConcatArrays, _fnOp4);
 
-    function ConcatArrays() {
-        _classCallCheck(this, ConcatArrays);
+  var _super32 = _createSuper(ConcatArrays);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(ConcatArrays).apply(this, arguments));
-    }
+  function ConcatArrays() {
+    _classCallCheck(this, ConcatArrays);
 
-    return ConcatArrays;
+    return _super32.apply(this, arguments);
+  }
+
+  return ConcatArrays;
 }(fnOp(ConcatArraysOp, function (a, b) {
-    return a.concat(b);
+  return a.concat(b);
 }));
 
-var DateOp = function (_opTypes6) {
-    _inherits(DateOp, _opTypes6);
+var DateOp = /*#__PURE__*/function (_opTypes6) {
+  _inherits(DateOp, _opTypes6);
 
-    function DateOp() {
-        _classCallCheck(this, DateOp);
+  var _super33 = _createSuper(DateOp);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(DateOp).apply(this, arguments));
-    }
+  function DateOp() {
+    _classCallCheck(this, DateOp);
 
-    return DateOp;
+    return _super33.apply(this, arguments);
+  }
+
+  return DateOp;
 }(opTypes(UnaryFnOp, DateValue, NumberValue));
 
 var dateOp = function dateOp(fn) {
-    return fnOp(DateOp, fn);
+  return fnOp(DateOp, fn);
 };
 
-var DayOfMonth = function (_dateOp) {
-    _inherits(DayOfMonth, _dateOp);
+var DayOfMonth = /*#__PURE__*/function (_dateOp) {
+  _inherits(DayOfMonth, _dateOp);
 
-    function DayOfMonth() {
-        _classCallCheck(this, DayOfMonth);
+  var _super34 = _createSuper(DayOfMonth);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(DayOfMonth).apply(this, arguments));
-    }
+  function DayOfMonth() {
+    _classCallCheck(this, DayOfMonth);
 
-    return DayOfMonth;
+    return _super34.apply(this, arguments);
+  }
+
+  return DayOfMonth;
 }(dateOp(function (d) {
-    return d.getDate();
+  return d.getDate();
 }));
 
-var Year = function (_dateOp2) {
-    _inherits(Year, _dateOp2);
+var Year = /*#__PURE__*/function (_dateOp2) {
+  _inherits(Year, _dateOp2);
 
-    function Year() {
-        _classCallCheck(this, Year);
+  var _super35 = _createSuper(Year);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Year).apply(this, arguments));
-    }
+  function Year() {
+    _classCallCheck(this, Year);
 
-    return Year;
+    return _super35.apply(this, arguments);
+  }
+
+  return Year;
 }(dateOp(function (d) {
-    return d.getUTCFullYear();
+  return d.getUTCFullYear();
 }));
 
-var Month = function (_dateOp3) {
-    _inherits(Month, _dateOp3);
+var Month = /*#__PURE__*/function (_dateOp3) {
+  _inherits(Month, _dateOp3);
 
-    function Month() {
-        _classCallCheck(this, Month);
+  var _super36 = _createSuper(Month);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Month).apply(this, arguments));
-    }
+  function Month() {
+    _classCallCheck(this, Month);
 
-    return Month;
+    return _super36.apply(this, arguments);
+  }
+
+  return Month;
 }(dateOp(function (d) {
-    return d.getUTCMonth() + 1;
+  return d.getUTCMonth() + 1;
 }));
 
-var Hour = function (_dateOp4) {
-    _inherits(Hour, _dateOp4);
+var Hour = /*#__PURE__*/function (_dateOp4) {
+  _inherits(Hour, _dateOp4);
 
-    function Hour() {
-        _classCallCheck(this, Hour);
+  var _super37 = _createSuper(Hour);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Hour).apply(this, arguments));
-    }
+  function Hour() {
+    _classCallCheck(this, Hour);
 
-    return Hour;
+    return _super37.apply(this, arguments);
+  }
+
+  return Hour;
 }(dateOp(function (d) {
-    return d.getUTCHours();
+  return d.getUTCHours();
 }));
 
-var Minute = function (_dateOp5) {
-    _inherits(Minute, _dateOp5);
+var Minute = /*#__PURE__*/function (_dateOp5) {
+  _inherits(Minute, _dateOp5);
 
-    function Minute() {
-        _classCallCheck(this, Minute);
+  var _super38 = _createSuper(Minute);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Minute).apply(this, arguments));
-    }
+  function Minute() {
+    _classCallCheck(this, Minute);
 
-    return Minute;
+    return _super38.apply(this, arguments);
+  }
+
+  return Minute;
 }(dateOp(function (d) {
-    return d.getUTCMinutes();
+  return d.getUTCMinutes();
 }));
 
-var Second = function (_dateOp6) {
-    _inherits(Second, _dateOp6);
+var Second = /*#__PURE__*/function (_dateOp6) {
+  _inherits(Second, _dateOp6);
 
-    function Second() {
-        _classCallCheck(this, Second);
+  var _super39 = _createSuper(Second);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Second).apply(this, arguments));
-    }
+  function Second() {
+    _classCallCheck(this, Second);
 
-    return Second;
+    return _super39.apply(this, arguments);
+  }
+
+  return Second;
 }(dateOp(function (d) {
-    return d.getUTCSeconds();
+  return d.getUTCSeconds();
 }));
 
-var Millisecond = function (_dateOp7) {
-    _inherits(Millisecond, _dateOp7);
+var Millisecond = /*#__PURE__*/function (_dateOp7) {
+  _inherits(Millisecond, _dateOp7);
 
-    function Millisecond() {
-        _classCallCheck(this, Millisecond);
+  var _super40 = _createSuper(Millisecond);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Millisecond).apply(this, arguments));
-    }
+  function Millisecond() {
+    _classCallCheck(this, Millisecond);
 
-    return Millisecond;
+    return _super40.apply(this, arguments);
+  }
+
+  return Millisecond;
 }(dateOp(function (d) {
-    return d.getUTCMilliseconds();
+  return d.getUTCMilliseconds();
 }));
 
-var TypeCond = function () {
-    function TypeCond(stack, args, op) {
-        _classCallCheck(this, TypeCond);
+var TypeCond = /*#__PURE__*/function () {
+  function TypeCond(stack, args, op) {
+    _classCallCheck(this, TypeCond);
 
-        var InputType = op.InputType;
-        var alt = op.alt;
+    var InputType = op.InputType,
+        alt = op.alt;
+    this.result_types = new Set([op.ResultType, alt.ResultType]);
+    this.stack = stack;
+    this.isType = InputType.isType;
+    this.args = args;
+    this.op = op;
+    this.alt_value = alt.value;
+  }
 
+  _createClass(TypeCond, [{
+    key: "run",
+    value: function run(fields) {
+      var stack = this.stack,
+          isType = this.isType,
+          op = this.op;
+      var new_args = [];
 
-        this.result_types = new Set([op.ResultType, alt.ResultType]);
-        this.stack = stack;
-        this.isType = InputType.isType;
-        this.args = args;
-        this.op = op;
-        this.alt_value = alt.value;
-    }
+      var _iterator = _createForOfIteratorHelper(this.args),
+          _step;
 
-    _createClass(TypeCond, [{
-        key: 'run',
-        value: function run(fields) {
-            var stack = this.stack;
-            var isType = this.isType;
-            var op = this.op;
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var arg = _step.value;
+          var result = arg.run(fields);
 
-            var new_args = [];
+          if (!isType(result)) {
+            return this.alt_value;
+          }
 
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-                for (var _iterator = this.args[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var arg = _step.value;
-
-                    var result = arg.run(fields);
-
-                    if (!isType(result)) {
-                        return this.alt_value;
-                    }
-
-                    new_args.push(result);
-                }
-            } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
-                    }
-                } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
-                    }
-                }
-            }
-
-            for (var i = new_args.length - 1; i >= 0; i--) {
-                stack.push(new_args[i]);
-            }
-
-            return op.run(fields);
+          new_args.push(result);
         }
-    }]);
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
 
-    return TypeCond;
+      for (var i = new_args.length - 1; i >= 0; i--) {
+        stack.push(new_args[i]);
+      }
+
+      return op.run(fields);
+    }
+  }]);
+
+  return TypeCond;
 }();
 
-var PopFromStack = function () {
-    function PopFromStack(stack) {
-        _classCallCheck(this, PopFromStack);
+var PopFromStack = /*#__PURE__*/function () {
+  function PopFromStack(stack) {
+    _classCallCheck(this, PopFromStack);
 
-        this.stack = stack;
+    this.stack = stack;
+  }
+
+  _createClass(PopFromStack, [{
+    key: "run",
+    value: function run() {
+      return this.stack.pop();
     }
+  }]);
 
-    _createClass(PopFromStack, [{
-        key: 'run',
-        value: function run() {
-            return this.stack.pop();
-        }
-    }]);
-
-    return PopFromStack;
+  return PopFromStack;
 }();
 
 var ops = {
-    $add: Add,
-    $subtract: Subtract,
-    $multiply: Multiply,
-    $divide: Divide,
-    $mod: Mod,
-    $abs: Abs,
-    $ceil: Ceil,
-    $floor: Floor,
-    $ln: Ln,
-    $log10: Log10,
-    $pow: Pow,
-    $sqrt: Sqrt,
-    $trunc: Trunc,
-    $concat: Concat,
-    $toLower: ToLower,
-    $toUpper: ToUpper,
-    $concatArrays: ConcatArrays,
-    $dayOfMonth: DayOfMonth,
-    $year: Year,
-    $month: Month,
-    $hour: Hour,
-    $minute: Minute,
-    $second: Second,
-    $millisecond: Millisecond
+  $add: Add,
+  $subtract: Subtract,
+  $multiply: Multiply,
+  $divide: Divide,
+  $mod: Mod,
+  $abs: Abs,
+  $ceil: Ceil,
+  $floor: Floor,
+  $ln: Ln,
+  $log10: Log10,
+  $pow: Pow,
+  $sqrt: Sqrt,
+  $trunc: Trunc,
+  $concat: Concat,
+  $toLower: ToLower,
+  $toUpper: ToUpper,
+  $concatArrays: ConcatArrays,
+  $dayOfMonth: DayOfMonth,
+  $year: Year,
+  $month: Month,
+  $hour: Hour,
+  $minute: Minute,
+  $second: Second,
+  $millisecond: Millisecond
 };
 
 var buildOp = function buildOp(paths, name, args) {
-    var Op = ops[name];
-    if (!Op) {
-        unknownOp(name);
+  var Op = ops[name];
+
+  if (!Op) {
+    unknownOp(name);
+  }
+
+  if (!Array.isArray(args)) {
+    args = [args];
+  }
+
+  var op = new Op(),
+      tc_nodes = [],
+      new_paths = [],
+      stack = [];
+
+  for (var i = 0; i < args.length && i < op.length; i++) {
+    var arg = build(new_paths, args[i]);
+
+    if (arg.ResultType) {
+      if (arg.ResultType !== op.InputType) {
+        return op.alt;
+      }
+
+      op.add(arg);
+      continue;
     }
 
-    if (!Array.isArray(args)) {
-        args = [args];
+    if (arg instanceof TypeCond) {
+      if (!arg.result_types.has(op.InputType)) {
+        return op.alt;
+      }
+
+      if (arg.result_types.size === 1) {
+        op.add(arg);
+        continue;
+      }
     }
 
-    var op = new Op(),
-        tc_nodes = [],
-        new_paths = [],
-        stack = [];
+    tc_nodes.push(arg);
+    op.add(new PopFromStack(stack));
+  }
 
-    for (var i = 0; i < args.length && i < op.length; i++) {
-        var arg = build(new_paths, args[i]);
+  if (!new_paths.length) {
+    return new op.ResultType(op.run());
+  }
 
-        if (arg.ResultType) {
-            if (arg.ResultType !== op.InputType) {
-                return op.alt;
-            }
+  paths.push.apply(paths, new_paths);
 
-            op.add(arg);
+  if (!tc_nodes.length) {
+    return op;
+  }
 
-            continue;
-        }
-
-        if (arg instanceof TypeCond) {
-            if (!arg.result_types.has(op.InputType)) {
-                return op.alt;
-            }
-
-            if (arg.result_types.size === 1) {
-                op.add(arg);
-
-                continue;
-            }
-        }
-
-        tc_nodes.push(arg);
-        op.add(new PopFromStack(stack));
-    }
-
-    if (!new_paths.length) {
-        return new op.ResultType(op.run());
-    }
-
-    paths.push.apply(paths, new_paths);
-
-    if (!tc_nodes.length) {
-        return op;
-    }
-
-    return new TypeCond(stack, tc_nodes, op);
+  return new TypeCond(stack, tc_nodes, op);
 };
 
 var buildObject = function buildObject(paths, expr) {
-    var op_names = new Set(),
-        fields = new Set();
+  var op_names = new Set(),
+      fields = new Set();
 
-    for (var field in expr) {
-        (field[0] === '$' ? op_names : fields).add(field);
+  for (var field in expr) {
+    (field[0] === '$' ? op_names : fields).add(field);
+  }
+
+  if (op_names.size > 1) {
+    throw Error('objects cannot have more than one operator');
+  }
+
+  if (op_names.size) {
+    var _iterator2 = _createForOfIteratorHelper(fields),
+        _step2;
+
+    try {
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        var path = _step2.value;
+        throw Error("unexpected field '".concat(path, "'"));
+      }
+    } catch (err) {
+      _iterator2.e(err);
+    } finally {
+      _iterator2.f();
     }
 
-    if (op_names.size > 1) {
-        throw Error('objects cannot have more than one operator');
-    }
+    var _iterator3 = _createForOfIteratorHelper(op_names),
+        _step3;
 
-    if (op_names.size) {
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
+    try {
+      for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+        var name = _step3.value;
 
-        try {
-            for (var _iterator2 = fields[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                var path = _step2.value;
-
-                throw Error('unexpected field \'' + path + '\'');
-            }
-        } catch (err) {
-            _didIteratorError2 = true;
-            _iteratorError2 = err;
-        } finally {
-            try {
-                if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                    _iterator2.return();
-                }
-            } finally {
-                if (_didIteratorError2) {
-                    throw _iteratorError2;
-                }
-            }
+        if (name === '$literal') {
+          return Value.literal(expr[name]);
         }
 
-        var _iteratorNormalCompletion3 = true;
-        var _didIteratorError3 = false;
-        var _iteratorError3 = undefined;
-
-        try {
-            for (var _iterator3 = op_names[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                var name = _step3.value;
-
-                if (name === '$literal') {
-                    return Value.literal(expr[name]);
-                }
-
-                return buildOp(paths, name, expr[name]);
-            }
-        } catch (err) {
-            _didIteratorError3 = true;
-            _iteratorError3 = err;
-        } finally {
-            try {
-                if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                    _iterator3.return();
-                }
-            } finally {
-                if (_didIteratorError3) {
-                    throw _iteratorError3;
-                }
-            }
-        }
+        return buildOp(paths, name, expr[name]);
+      }
+    } catch (err) {
+      _iterator3.e(err);
+    } finally {
+      _iterator3.f();
     }
+  }
 
-    var new_paths = [],
-        obj = {};
+  var new_paths = [],
+      obj = {};
 
-    for (var _field in expr) {
-        obj[_field] = build(new_paths, expr[_field]);
-    }
+  for (var _field in expr) {
+    obj[_field] = build(new_paths, expr[_field]);
+  }
 
-    var node = new ObjectExpr(obj);
+  var node = new ObjectExpr(obj);
 
-    if (!new_paths.length) {
-        return new Value(node.run());
-    }
+  if (!new_paths.length) {
+    return new Value(node.run());
+  }
 
-    paths.push.apply(paths, new_paths);
-
-    return node;
+  paths.push.apply(paths, new_paths);
+  return node;
 };
 
 var build = function build(paths, expr) {
-    if (typeof expr === 'string' && expr[0] === '$') {
-        var path = new Path(expr.substring(1));
+  if (typeof expr === 'string' && expr[0] === '$') {
+    var path = new Path(expr.substring(1));
+    paths.push(path);
+    return new Get(path);
+  }
 
-        paths.push(path);
+  if (expr == null || expr.constructor !== Object) {
+    return Value.any(expr);
+  }
 
-        return new Get(path);
-    }
-
-    if (expr == null || expr.constructor !== Object) {
-        return Value.any(expr);
-    }
-
-    return buildObject(paths, expr);
+  return buildObject(paths, expr);
 };
 
 module.exports = function (expr) {
-    var paths = [],
-        ast = build(paths, expr);
-
-    return {
-        ast: ast,
-        paths: paths,
-        has_refs: !!paths.length
-    };
+  var paths = [],
+      ast = build(paths, expr);
+  return {
+    ast: ast,
+    paths: paths,
+    has_refs: !!paths.length
+  };
 };
