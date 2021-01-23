@@ -1,6 +1,6 @@
 {
   "name": "@insertish/zangodb",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Fork of ZangoDB - MongoDB-like interface for HTML5 IndexedDB",
   "main": "./build/src/index.js",
   "typings": "./src/zangodb.d.ts",
@@ -48,6 +48,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
+    "@types/node": "^14.14.22",
     "browserify": "^17.0.0",
     "chai": "^4.2.0",
     "fake-indexeddb": "^3.1.2",

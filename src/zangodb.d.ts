@@ -1,6 +1,6 @@
 /// <reference types="node" />
 
-declare module "zangodb" {
+declare module "@insertish/zangodb" {
     export interface Callback { (error: Error): void; }
     export interface ResultCallback<T> { (error: Error, result: T): void; }
     export interface IteratorCallback { (doc: any): void; }
