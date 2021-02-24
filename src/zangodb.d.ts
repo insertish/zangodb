@@ -5,7 +5,7 @@ declare module "@insertish/zangodb" {
     export interface ResultCallback<T> { (error: Error, result: T): void; }
     export interface IteratorCallback { (doc: any): void; }
 
-    export class Cursor extends NodeJS.EventEmitter {
+    export class Cursor {
         filter(expr: Object): Cursor;
         forEach(fn: IteratorCallback, cb?: Callback): Promise<Object>;
         group(spec: Object): Cursor;
@@ -30,7 +30,7 @@ declare module "@insertish/zangodb" {
         update(expr: Object, spec: Object, cb?: Callback): Promise<void>;
     }
 
-    export class Db extends NodeJS.EventEmitter {
+    export class Db {
         constructor(name: string, version?: number, config?: string[]|Object);
 
         name: string;
