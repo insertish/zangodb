@@ -1,6 +1,6 @@
 {
   "name": "@insertish/zangodb",
-  "version": "1.0.10-patch.0",
+  "version": "1.0.12",
   "description": "Fork of ZangoDB - MongoDB-like interface for HTML5 IndexedDB",
   "main": "./build/src/index.js",
   "typings": "./src/zangodb.d.ts",
