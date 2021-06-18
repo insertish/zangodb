@@ -12,8 +12,6 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var memoize = require('memoizee');
-
 var _require = require('../util.js'),
     _get = _require.get;
 
@@ -24,7 +22,6 @@ var Fields = /*#__PURE__*/function () {
     _classCallCheck(this, Fields);
 
     this._doc = doc;
-    this.get = memoize(this.get);
   }
 
   _createClass(Fields, [{

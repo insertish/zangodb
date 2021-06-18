@@ -1,5 +1,4 @@
 const EventEmitter = require('events'),
-      memoize = require('memoizee'),
       Q = require('q');
 
 const { getIDBError } = require('./util.js');
@@ -172,7 +171,7 @@ class Db extends EventEmitter {
     }
 
     _initGetConn() {
-        this._getConn = memoize(this._getConn, { async: true });
+        // noop
     }
 
     /**

@@ -32,8 +32,6 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var memoize = require('memoizee');
-
 var _require = require('./util.js'),
     unknownOp = _require.unknownOp,
     hashify = _require.hashify,
@@ -359,16 +357,16 @@ var createGroupByRefFn = function createGroupByRefFn(next, expr, steps) {
       in_iter = steps.in_iter,
       in_end = steps.in_end;
   var groups = [];
-  var add = memoize(function (_id_hash, _id) {
+
+  var add = function add(_id_hash, _id) {
     var group_doc = {
       _id: _id
     };
     groups.push(group_doc);
     runSteps(in_start, group_doc);
     return group_doc;
-  }, {
-    length: 1
-  });
+  };
+
   var ast = expr.ast;
 
   var _idFn = function _idFn(doc) {
@@ -415,9 +413,10 @@ var createGroupFn = function createGroupFn(next, expr, steps) {
   };
 
   if (in_iter.length) {
-    var add = memoize(function () {
+    var add = function add() {
       return initGroupDoc();
-    });
+    };
+
     return groupLoopFn(next, in_end, groups, function (doc) {
       runSteps(in_iter, add(), doc);
     });

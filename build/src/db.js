@@ -29,7 +29,6 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 var EventEmitter = require('events'),
-    memoize = require('memoizee'),
     Q = require('q');
 
 var _require = require('./util.js'),
@@ -252,10 +251,7 @@ var Db = /*#__PURE__*/function (_EventEmitter) {
     }
   }, {
     key: "_initGetConn",
-    value: function _initGetConn() {
-      this._getConn = memoize(this._getConn, {
-        async: true
-      });
+    value: function _initGetConn() {// noop
     }
     /**
      * Retrieve a {@link Collection} instance.

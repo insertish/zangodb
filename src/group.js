@@ -1,5 +1,3 @@
-const memoize = require('memoizee');
-
 const { unknownOp, hashify } = require('./util.js'),
       build = require('./lang/expression.js'),
       Fields = require('./lang/fields.js');
@@ -155,14 +153,14 @@ const createGroupByRefFn = (next, expr, steps) => {
     const { in_start, in_iter, in_end } = steps;
     const groups = [];
 
-    const add = memoize((_id_hash, _id) => {
+    const add = (_id_hash, _id) => {
         const group_doc = { _id };
 
         groups.push(group_doc);
         runSteps(in_start, group_doc);
 
         return group_doc;
-    }, { length: 1 });
+    };
 
     const { ast } = expr;
     const _idFn = doc => ast.run(new Fields(doc));
@@ -205,7 +203,7 @@ const createGroupFn = (next, expr, steps) => {
     };
 
     if (in_iter.length) {
-        const add = memoize(() => initGroupDoc());
+        const add = () => initGroupDoc();
 
         return groupLoopFn(next, in_end, groups, (doc) => {
             runSteps(in_iter, add(), doc);

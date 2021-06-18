@@ -1,12 +1,9 @@
-const memoize = require('memoizee');
-
 const { get } = require('../util.js');
 const MISSING = require('./missing_symbol.js');
 
 class Fields {
     constructor(doc) {
         this._doc = doc;
-        this.get = memoize(this.get);
     }
 
     get(path) {

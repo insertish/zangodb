@@ -1,6 +1,6 @@
 {
   "name": "@insertish/zangodb",
-  "version": "1.0.12",
+  "version": "1.0.12-nomemo",
   "description": "Fork of ZangoDB - MongoDB-like interface for HTML5 IndexedDB",
   "main": "./build/src/index.js",
   "typings": "./src/zangodb.d.ts",
@@ -41,7 +41,6 @@
   "dependencies": {
     "clone": "^2.1.2",
     "deepmerge": "^4.2.2",
-    "memoizee": "^0.4.15",
     "object-hash": "^2.1.1",
     "q": "^1.5.1"
   },
